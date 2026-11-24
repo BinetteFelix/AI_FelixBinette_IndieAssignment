@@ -10,16 +10,10 @@ Current stage and anything unfinished:
 ## Initial prediction
 
 Three observations the rival needs, including one it might not have:
-The rival needs a way to stop checking for scraps, if it doesn’t find one
- for a whole lap through the area it stops checking and moves back to the depot. It also needs a way to check if the scrap is reachable or not, meaning if the scrap is outside of the play area it can ignore that scrap. And lastly the rival needs to be able to be able to find the shortest path to the scrap, even when seeing a wall infront of itself, because now it looks like it just takes ‘A’ path instead of a short path.
 
-Seeing a pickup across a gap proves / does not prove reachability because: 
-
-It seems like the rival wants every scrap to be reachable, since it never switches target scrap even if it can’t reach the current target. So in the current state, reachability is decided by whether or not the rival can see it. 
+Seeing a pickup across a gap proves / does not prove reachability because:
 
 One question about NPC behaviour:
-
-Does the rival check for the best path around a blocked area? Or how does I evaluate whether a path is shorter when there is a wall in front of the rival. 
 
 ## One complete trace
 
@@ -50,4 +44,3 @@ My counterexample or experiment: prediction, observed result, and one limitation
 People I discussed or playtested with:
 Code, sources or substantive tools/AI assistance I used, and how I verified them:
 If unfinished: what works, exact reproduction steps, and the help I need:
-
