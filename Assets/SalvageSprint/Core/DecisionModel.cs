@@ -63,11 +63,21 @@ namespace SalvageSprint.Core
         public static TravelStatus Classify(bool onMesh, bool pending, bool completePath,
             bool hasPath, float remainingDistance, float stoppingDistance)
         {
-            if (!onMesh) return TravelStatus.Failed;
-            if (pending) return TravelStatus.Pending;
-            if (!completePath || float.IsNaN(remainingDistance) || float.IsInfinity(remainingDistance))
+            if (!onMesh)
                 return TravelStatus.Failed;
-            if (remainingDistance <= stoppingDistance) return TravelStatus.Arrived;
+
+            if (pending) 
+                return TravelStatus.Pending;
+
+            if (!completePath || float.IsNaN(remainingDistance) || remainingDistance < 0)
+                return TravelStatus.Failed;
+
+            if (float.IsPositiveInfinity(remainingDistance))
+                return hasPath ? TravelStatus.Moving : TravelStatus.Failed;
+
+            if (remainingDistance <= stoppingDistance) 
+                return TravelStatus.Arrived;
+
             return hasPath ? TravelStatus.Moving : TravelStatus.Failed;
         }
     }

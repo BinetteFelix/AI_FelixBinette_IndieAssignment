@@ -9,8 +9,9 @@ namespace SalvageSprint
     {
         [SerializeField] private MatchController match;
         [SerializeField] private Transform[] surveyPoints;
-        [SerializeField, Min(.05f)] private float decisionInterval = .15f;
+        [SerializeField, Min(0.05f)] private float decisionInterval = .15f;
         [SerializeField] private bool logDecisionChanges;
+
         private readonly Dictionary<int, float> failedUntil = new Dictionary<int, float>();
         private RaceActor actor;
         private Navigator navigator;
@@ -26,7 +27,10 @@ namespace SalvageSprint
         public string LastFailure { get; private set; } = "None";
 
         public void Configure(MatchController owner, Transform[] points)
-        { match = owner; surveyPoints = points; }
+        { 
+            match = owner; 
+            surveyPoints = points; 
+        }
 
         private void Awake()
         {
@@ -38,26 +42,41 @@ namespace SalvageSprint
 
         private void Update()
         {
-            if (!match.IsRunning) { navigator.Cancel(); return; }
+            if (!match.IsRunning) 
+            { 
+                navigator.Cancel(); 
+                return; 
+            }
+
             TravelStatus travel = navigator.Poll();
-            if (Time.time < nextDecision) return;
+
+            if (Time.time < nextDecision) 
+                return;
+
             nextDecision = Time.time + decisionInterval;
+
             if (travel == TravelStatus.Failed && rememberedId >= 0)
             {
                 failedUntil[rememberedId] = Time.time + 6;
                 LastFailure = "Route failed for pickup " + rememberedId + "; ignore for 6 seconds";
             }
-            if (rememberedId >= 0 && !match.IsAvailable(rememberedId)) rememberedId = -1;
+
+            if (rememberedId >= 0 && !match.IsAvailable(rememberedId))
+                rememberedId = -1;
+
             if (CurrentDecision.Task == TaskKind.Explore
                 && (travel == TravelStatus.Arrived || travel == TravelStatus.Failed))
                 surveyIndex = (surveyIndex + 1) % surveyPoints.Length;
 
             LastObservation = sensor.Capture(actor, rememberedId, IsBlocked);
+
             CurrentFacts = DecisionPolicy.Infer(LastObservation);
             Decision next = DecisionPolicy.Choose(CurrentFacts);
+
             bool changed = next.Task != CurrentDecision.Task || next.TargetId != CurrentDecision.TargetId;
             CurrentDecision = next;
             DecisionCount++;
+
             if (changed && logDecisionChanges)
                 Debug.Log($"[{Time.time:F1}] {next.Task} target={next.TargetId}: {next.Reason}", this);
 
@@ -70,6 +89,7 @@ namespace SalvageSprint
             {
                 rememberedId = next.TargetId;
                 SalvagePickup target = match.GetPickup(next.TargetId);
+
                 if (target != null && match.IsAvailable(next.TargetId))
                     navigator.Request(next.TargetId, target.transform.position);
                 else navigator.Cancel();
@@ -82,6 +102,10 @@ namespace SalvageSprint
         }
 
         private bool IsBlocked(int id) => failedUntil.TryGetValue(id, out float until) && Time.time < until;
-        private void OnDisable() { if (navigator != null) navigator.Cancel(); }
+        private void OnDisable() 
+        { 
+            if (navigator != null) 
+                navigator.Cancel(); 
+        }
     }
 }
