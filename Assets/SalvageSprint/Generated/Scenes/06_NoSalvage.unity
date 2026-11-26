@@ -337,7 +337,7 @@ MonoBehaviour:
   - {fileID: 1699327920}
   pickups: []
   scoreGoal: 5
-  matchSeconds: 20
+  matchSeconds: 45
   sightBlockers:
     serializedVersion: 2
     m_Bits: 512
@@ -2624,7 +2624,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: SalvageSprint.Runtime::SalvageSprint.PickupSensor
   match: {fileID: 78800080}
+  sightCheckDisplaySeconds: 0.4
   radius: 10
+  ShowPerceptionRange: 1
+  showSightChecks: 1
 --- !u!114 &1699327918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2637,6 +2640,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57722a64d01dced64664b00e2e94b0bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SalvageSprint.Runtime::SalvageSprint.Navigator
+  failedRequestRetryDelay: 1
+  logNavigationFailures: 1
+  lastFailure: None
 --- !u!195 &1699327919
 NavMeshAgent:
   m_ObjectHideFlags: 0

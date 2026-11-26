@@ -1849,7 +1849,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: SalvageSprint.Runtime::SalvageSprint.PickupSensor
   match: {fileID: 1591603549}
+  sightCheckDisplaySeconds: 0.4
   radius: 10
+  ShowPerceptionRange: 1
+  showSightChecks: 1
 --- !u!114 &1059949054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1862,6 +1865,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57722a64d01dced64664b00e2e94b0bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SalvageSprint.Runtime::SalvageSprint.Navigator
+  failedRequestRetryDelay: 1
+  logNavigationFailures: 1
+  lastFailure: None
 --- !u!195 &1059949055
 NavMeshAgent:
   m_ObjectHideFlags: 0
