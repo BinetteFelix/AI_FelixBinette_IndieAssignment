@@ -4,8 +4,12 @@ Keep this short. Bullet points, a small table and one diagram or code trace are 
 
 Name: Felix Binette
 Exact Unity version: 6000.3.26f1
-Checkpoint commit / repository: Updated scripts
-Current stage and anything unfinished: 
+Checkpoint commit / repository: 
+Checkpoint Commit name: “Forgot to save scene in last commit...”, 
+Commit ID: ef9dcb55416be6f37da29d544b3ada928f88fd07, 
+Repo link: https://github.com/BinetteFelix/AI_FelixBinette_IndieAssignment
+
+Current stage and anything unfinished: Stage 4
 
 Initial prediction
 
@@ -29,9 +33,15 @@ Use one actual situation. Include the observation data, derived facts, selected 
 
 If the rival sees one scrap (8) and sets its current task to ‘Collect’ then it will never switch from that task unless the scrap is picked up by the player instead. If the rival sees another scrap (9) that is closer, the rival will ignore it and continue walking toward the scrap (8) it saw before. 
 
-In the rival brain it checks for the next decision by doing a bunch of steps, first by observing using the pick-up sensor, which looks for scraps within the pick-up range. Then the brain uses the last observation to get the current facts by calling the DecisionPolicy.Infer(LastObservation),then gets the next decision by using DecisionPolicy.Choose(CurentFacts). The rival messes up which scrap is closest by never checking which scrap is closest, it only  gets the scrap it sees first and can take the quickest/shortest path to get to said scrap. The rival therefore is kind of dumb in that sense because it doesn’t know which scrap is the closest, only which one it sees first. 
+In the rival brain it checks for the next decision by doing a bunch of steps, first by observing using the pick-up sensor, which looks for scraps within the pick-up range. Then the brain uses the last observation to get the current facts by calling the DecisionPolicy.Infer(LastObservation), then gets the next decision by using DecisionPolicy.Choose(CurentFacts). The rival messes up which scrap is closest by never checking which scrap is closest, it only  gets the scrap it sees first and can take the quickest/shortest path to get to said scrap. The rival therefore is kind of dumb in that sense because it doesn’t know which scrap is the closest, only which one it sees first. 
 
 Visible: 3, Travel: Moving, Task: Collect, Cargo: false, target: 8, blocked: 0. 
+
+* Explore ? Collect when an eligible pickup is selected.
+* Collect ? Deliver after successful collection gives cargo.
+* Deliver ? Collect or Explore after delivery, depending on available knowledge.
+* Collect ? another Collect target or Explore when the current target becomes unusable.
+
 
 Scenario record
 
@@ -46,10 +56,12 @@ Scenario record
 
 Supplied test result, with any added tests identified:
 Live walkthrough checked by / recording link if used:
+Recording link Is supplied in the Omniway submission.
 
 One correction and one independent check
 
-The original weakness and why it happened:
+The original weakness and why it happened: 
+Before, the rival got a little bit of “decision anxiety”, meaning when there was a scrap behind a wall and that scrap was the first scrap that the rival saw, it set that scrap as its target and “tried” to walk towards it and inevitably failed completely since it decided to stand completely still. Why this happened was because it never registered the scrap as functionally blocked or non-visible, causing it to break because if something is marked as blocked, the rival can’t walk towards it, but if it is visible it can, meaning there was some kind of logic complication there. 
 What I changed and why it addresses the cause:
 My counterexample or experiment: prediction, observed result, and one limitation:
 
@@ -60,4 +72,5 @@ People I discussed or playtested with: Emil Rotmark, Casper Aaröe
 Code, sources or substantive tools/AI assistance I used, and how I verified them: No AI or sources really, we only looked at the supplied scripts, like DecisionPolicy.cs, RivalBrain.cs, Navigator.cs, etc.
 
 If unfinished: what works, exact reproduction steps, and the help I need:
+
 The AI can decide if the current target scrap is the closest and considered reachable but isn’t and, meaning it will stand still and basically just look at the scrap for a few seconds then it will move on because it doesn’t seem to be able to reach it
